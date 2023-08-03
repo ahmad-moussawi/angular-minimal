@@ -1,15 +1,13 @@
-import { platformBrowser } from "@angular/platform-browser";
-import { NgModule, Component } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+import { BrowserModule, platformBrowser } from "@angular/platform-browser";
 
-@Component({
-  selector: "app-root",
-  template: "<strong>Hello this is my first application</strong>",
-})
-export class AppComponent {}
+import { AppComponent } from "./app.component";
+import { AppHeader } from "./pages/home/header.component";
+import { AppNav } from "./pages/home/nav.component";
+import { AppBanners } from "./pages/home/banners.component";
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AppHeader, AppNav, AppBanners],
   imports: [BrowserModule],
   bootstrap: [AppComponent],
 })
