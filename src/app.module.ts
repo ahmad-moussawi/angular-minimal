@@ -18,6 +18,11 @@ const routes: Routes = [
     loadChildren: () =>
       import("./pages/about/about.module").then((module) => module.AboutModule),
   },
+  {
+    path: "auth",
+    loadChildren: () =>
+      import("./pages/auth/auth.module").then((module) => module.AuthModule),
+  },
 ];
 
 @NgModule({
