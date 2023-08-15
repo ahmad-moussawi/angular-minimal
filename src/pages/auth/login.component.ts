@@ -1,9 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import {
-  FormControl,
-  FormGroup,
-  NgForm
-} from "@angular/forms";
+import { NgForm } from "@angular/forms";
 import { combineLatestWith } from "rxjs/operators";
 
 @Component({
@@ -56,6 +52,7 @@ import { combineLatestWith } from "rxjs/operators";
         </div>
       </div>
 
+      <button type="button" (click)="log(firstNameRef)">log</button>
       <button type="submit">Save</button>
     </form>
   `,
@@ -112,11 +109,6 @@ export class LoginComponent {
   firstname = "";
   lastname = "";
 
-  formGroup = new FormGroup({
-    firstName: new FormControl("Ahmad"),
-    lastName: new FormControl("Moussawi"),
-  });
-
   @ViewChild("formRef") formRef!: NgForm;
 
   log(obj: any) {
@@ -128,7 +120,12 @@ export class LoginComponent {
   }
 
   ngOnInit() {
-    const savedValue = JSON.parse(localStorage.getItem("loginform") ?? "");
+    let savedValue = null;
+
+    try {
+      savedValue = JSON.parse(localStorage.getItem("loginform") ?? "");
+    } catch (error) {}
+
     if (savedValue) {
       this.firstname = savedValue.firstname;
       this.lastname = savedValue.lastname;
@@ -136,6 +133,8 @@ export class LoginComponent {
   }
 
   ngAfterViewInit() {
+    console.log(this.formRef);
+
     if (
       this.formRef.valueChanges !== null &&
       this.formRef.statusChanges !== null
