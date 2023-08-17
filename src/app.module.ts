@@ -6,6 +6,7 @@ import { CardComponent } from "./playground/card.component";
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { PreloadAllModules, RouterModule, Routes } from "@angular/router";
+import { HttpClientModule } from "@angular/common/http";
 
 const routes: Routes = [
   {
@@ -17,6 +18,13 @@ const routes: Routes = [
     path: "about",
     loadChildren: () =>
       import("./pages/about/about.module").then((module) => module.AboutModule),
+  },
+  {
+    path: "products",
+    loadChildren: () =>
+      import("./pages/products/products.module").then(
+        (module) => module.ProductsModule
+      ),
   },
   {
     path: "auth",
@@ -35,6 +43,7 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     RouterModule.forRoot(routes, {
       preloadingStrategy: PreloadAllModules,
     }),

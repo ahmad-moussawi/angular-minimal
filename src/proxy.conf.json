@@ -1,0 +1,6 @@
+{
+    "/api": {
+        "target": "https://free-angular-course.ahmadmoussawi.com",
+        "changeOrigin": true
+    }
+}

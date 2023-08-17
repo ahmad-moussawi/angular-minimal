@@ -1,59 +1,38 @@
+import { HttpClient } from "@angular/common/http";
 import { Component, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
 import { combineLatestWith } from "rxjs/operators";
 
 @Component({
   selector: "app-login",
   template: `
-    <form #formRef="ngForm" (ngSubmit)="save(formRef.value)">
-      <pre>{{ formRef.value | json }}</pre>
+    <form #formRef="ngForm" (ngSubmit)="login(formRef.value)">
       <div class="form-group">
         <input
-          #firstNameRef="ngModel"
-          name="firstname"
+          #phoneRef="ngModel"
+          name="phone"
           required
-          minlength="3"
-          placeholder="First name"
-          [(ngModel)]="firstname"
+          [minlength]="8"
+          placeholder="Phone number"
+          [(ngModel)]="phone"
           class="form-control"
         />
 
-        <div *ngIf="$any(firstNameRef.errors)?.required" class="error">
-          The firstname field is required
-        </div>
+        <ng-container *ngIf="phoneRef.errors">
+          <div *ngIf="phoneRef.errors['required']" class="error">
+            The firstname field is required
+          </div>
 
-        <div *ngIf="firstNameRef.errors?.['minlength']" class="error">
-          The firstname should be at least
-          {{ $any(firstNameRef.errors)?.minlength.requiredLength }}, and you
-          typed only
-          {{ $any(firstNameRef.errors)?.minlength.actualLength }} chars.
-        </div>
+          <div *ngIf="phoneRef.errors['minlength']" class="error">
+            The firstname should be at least
+            {{ phoneRef.errors["minlength"].requiredLength }}, and you typed
+            only {{ phoneRef.errors["minlength"].actualLength }} chars.
+          </div>
+        </ng-container>
       </div>
 
-      <div class="form-group">
-        <input
-          #lastNameRef="ngModel"
-          name="lastname"
-          required
-          minlength="3"
-          placeholder="Last name"
-          [(ngModel)]="lastname"
-          class="form-control"
-        />
-
-        <div *ngIf="$any(lastNameRef.errors)?.required" class="error">
-          The lastname field is required
-        </div>
-        <div *ngIf="$any(lastNameRef.errors)?.minlength" class="error">
-          The lastname should be at least
-          {{ $any(lastNameRef.errors)?.minlength.requiredLength }}, and you
-          typed only
-          {{ $any(lastNameRef.errors)?.minlength.actualLength }} chars.
-        </div>
-      </div>
-
-      <button type="button" (click)="log(firstNameRef)">log</button>
-      <button type="submit">Save</button>
+      <button type="submit">Log In</button>
     </form>
   `,
   styles: [
@@ -106,17 +85,31 @@ import { combineLatestWith } from "rxjs/operators";
   ],
 })
 export class LoginComponent {
+  phone = "";
   firstname = "";
   lastname = "";
 
   @ViewChild("formRef") formRef!: NgForm;
 
+  constructor(public http: HttpClient, public router: Router) {}
+
   log(obj: any) {
     console.log(obj);
   }
 
-  save(data: any) {
+  login(data: any) {
     console.log(data);
+
+    this.http
+      .post("https://free-angular-course.ahmadmoussawi.com/api/token", {
+        phone: data.phone,
+        device_name: "Samsung Galaxy",
+      })
+      .subscribe((data: any) => {
+        localStorage.setItem("API_TOKEN", data.token);
+
+        this.router.navigate(["/"]);
+      });
   }
 
   ngOnInit() {

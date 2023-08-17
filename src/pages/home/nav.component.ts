@@ -3,8 +3,13 @@ import { Component } from "@angular/core";
 @Component({
   selector: "app-nav",
   template: `<nav>
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-    <a routerLinkActive="active">Products</a>
+    <a
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Home</a
+    >
+    <a routerLink="/products" routerLinkActive="active">Products</a>
     <a routerLink="/about" routerLinkActive="active">About</a>
     <a routerLink="/auth/login" routerLinkActive="active">Login</a>
   </nav>`,
