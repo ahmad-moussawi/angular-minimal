@@ -3,10 +3,13 @@ import { Component, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 import { combineLatestWith } from "rxjs/operators";
+import { AppStorageService } from "src/services/appstorage.service";
 
 @Component({
   selector: "app-login",
   template: `
+    <p>{{ message | truncate : 4 }}</p>
+
     <form #formRef="ngForm" (ngSubmit)="login(formRef.value)">
       <div class="form-group">
         <input
@@ -89,9 +92,15 @@ export class LoginComponent {
   firstname = "";
   lastname = "";
 
+  message = "A very long message";
+
   @ViewChild("formRef") formRef!: NgForm;
 
-  constructor(public http: HttpClient, public router: Router) {}
+  constructor(
+    public http: HttpClient,
+    public router: Router,
+    public storage: AppStorageService
+  ) {}
 
   log(obj: any) {
     console.log(obj);
@@ -106,7 +115,7 @@ export class LoginComponent {
         device_name: "Samsung Galaxy",
       })
       .subscribe((data: any) => {
-        localStorage.setItem("API_TOKEN", data.token);
+        this.storage.set("API_TOKEN", data.token);
 
         this.router.navigate(["/"]);
       });

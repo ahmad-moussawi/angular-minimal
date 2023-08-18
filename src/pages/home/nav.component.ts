@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { AppStorageService } from "src/services/appstorage.service";
 
 @Component({
   selector: "app-nav",
@@ -9,9 +11,12 @@ import { Component } from "@angular/core";
       [routerLinkActiveOptions]="{ exact: true }"
       >Home</a
     >
-    <a routerLink="/products" routerLinkActive="active">Products</a>
+    <a track="nav products" routerLink="/products" routerLinkActive="active"
+      >Products</a
+    >
     <a routerLink="/about" routerLinkActive="active">About</a>
     <a routerLink="/auth/login" routerLinkActive="active">Login</a>
+    <button (click)="logout()">Logout</button>
   </nav>`,
   styles: [
     `
@@ -30,4 +35,11 @@ import { Component } from "@angular/core";
     `,
   ],
 })
-export class AppNav {}
+export class AppNav {
+  constructor(public router: Router, public storage: AppStorageService) {}
+
+  logout() {
+    this.storage.remove("API_TOKEN");
+    this.router.navigate(["/"]);
+  }
+}

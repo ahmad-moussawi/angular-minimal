@@ -7,6 +7,10 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { PreloadAllModules, RouterModule, Routes } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
+import { AppStorageService } from "src/services/appstorage.service";
+import { SessionStorageService } from "src/services/sessionstorage.service";
+import { AnalyticsService } from "src/services/analytics.service";
+import { DirectivesModule } from "./directives/directives.module";
 
 const routes: Routes = [
   {
@@ -44,9 +48,16 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
+    DirectivesModule,
     RouterModule.forRoot(routes, {
       preloadingStrategy: PreloadAllModules,
     }),
+  ],
+  providers: [
+    // AppStorageService,
+    // { provide: AppStorageService, useClass: AppStorageService }
+    { provide: AppStorageService, useClass: SessionStorageService },
+    AnalyticsService,
   ],
   bootstrap: [AppComponent],
 })

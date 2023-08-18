@@ -64,7 +64,8 @@
               "browserTarget": "ngminimal:build:production"
             },
             "development": {
-              "browserTarget": "ngminimal:build:development"
+              "browserTarget": "ngminimal:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
