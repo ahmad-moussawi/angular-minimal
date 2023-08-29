@@ -28,6 +28,13 @@ const routes: Routes = [
       import("./pages/about/about.module").then((module) => module.AboutModule),
   },
   {
+    path: "search",
+    loadChildren: () =>
+      import("./pages/search/search.module").then(
+        (module) => module.SearchModule
+      ),
+  },
+  {
     path: "products",
     canActivate: [IsAuthenticatedGuard],
     loadChildren: () =>

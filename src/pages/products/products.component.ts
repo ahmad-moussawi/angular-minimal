@@ -86,9 +86,11 @@ export class ProductsComponent {
     this.route.queryParamMap.subscribe((queryParamsMap) => {
       const categoryId = queryParamsMap.get("category_id") ?? "";
 
-      this.productService.get(categoryId).subscribe((data: any) => {
-        this.products = data.data;
-      });
+      this.productService
+        .get({ category_id: categoryId })
+        .subscribe((data: any) => {
+          this.products = data.data;
+        });
     });
 
     this.productService.getCategories().subscribe((response: any) => {

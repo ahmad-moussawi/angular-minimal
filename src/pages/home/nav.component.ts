@@ -16,6 +16,7 @@ import { AuthService } from "src/services/auth.service";
     >
     <a routerLink="/about" routerLinkActive="active">About</a>
     <a routerLink="/auth/login" routerLinkActive="active">Login</a>
+    <a routerLink="/search" routerLinkActive="active">Search</a>
     <button (click)="logout()">Logout</button>
   </nav>`,
   styles: [

@@ -3,16 +3,20 @@ import { HttpClient } from "@angular/common/http";
 import { catchError, map, throwError } from "rxjs";
 import { Router } from "@angular/router";
 
+interface ItemApiParams {
+  category_id?: string;
+  q?: string;
+  requireTotalCount?: string;
+}
+
 @Injectable()
 export class ProductService {
   constructor(public http: HttpClient, public router: Router) {}
 
-  get(categoryId: string) {
+  get(itemsParams: ItemApiParams) {
     return this.http
       .get("/api/items", {
-        params: {
-          category_id: categoryId,
-        },
+        params: itemsParams as any,
       })
       .pipe(
         catchError((err) => {
