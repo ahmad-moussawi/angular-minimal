@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { AppStorageService } from "src/services/appstorage.service";
+import { AuthService } from "src/services/auth.service";
 
 @Component({
   selector: "app-nav",
@@ -36,10 +36,10 @@ import { AppStorageService } from "src/services/appstorage.service";
   ],
 })
 export class AppNav {
-  constructor(public router: Router, public storage: AppStorageService) {}
+  constructor(public router: Router, public auth: AuthService) {}
 
   logout() {
-    this.storage.remove("API_TOKEN");
+    this.auth.logout();
     this.router.navigate(["/"]);
   }
 }

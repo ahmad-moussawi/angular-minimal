@@ -1,16 +1,10 @@
-import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { catchError, throwError } from "rxjs";
-import { AnalyticsService } from "src/services/analytics.service";
-import { AppStorageService } from "src/services/appstorage.service";
+import { ProductService } from "src/services/product.service";
 
 @Component({
   template: `
     <h1>Products</h1>
-
-    <button track="Test button">Test button</button>
-    <button track="Test button 2">Test button 2</button>
 
     <nav>
       <a
@@ -82,68 +76,23 @@ export class ProductsComponent {
   products: any[] = [];
   categories: any[] = [];
 
-  // private http = inject(HttpClient);
-
   constructor(
-    private http: HttpClient,
     public router: Router,
     public route: ActivatedRoute,
-    public storage: AppStorageService
+    public productService: ProductService
   ) {}
 
   ngOnInit() {
-    const token = this.storage.get("API_TOKEN");
-
     this.route.queryParamMap.subscribe((queryParamsMap) => {
       const categoryId = queryParamsMap.get("category_id") ?? "";
 
-      const productUrl = "/api/items";
-      // const productUrl = "https://free-angular-course.ahmadmoussawi.com/api/items";
-
-      this.http
-        .get(productUrl, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            category_id: categoryId,
-          },
-        })
-        .pipe(
-          catchError((err) => {
-            console.error(err);
-
-            if (err.status === 401) {
-              alert("Please login to see the products");
-              this.router.navigate(["/auth/login"]);
-              return throwError(() => new Error("Unauthorized"));
-            }
-
-            alert("Failed to fetch products");
-            return throwError(() => new Error("Failed to fetch products"));
-          })
-        )
-        .subscribe((data: any) => {
-          console.log("here");
-          this.products = data.data;
-        });
+      this.productService.get(categoryId).subscribe((data: any) => {
+        this.products = data.data;
+      });
     });
 
-    this.http
-      .get("/api/categories", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          take: 6,
-          select: '["id", "name"]',
-        },
-      })
-      .subscribe((response: any) => {
-        this.categories = response.data.map((category: any) => {
-          category.name = category.name.split(",").at(-1);
-          return category;
-        });
-      });
+    this.productService.getCategories().subscribe((response: any) => {
+      this.categories = response.data;
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
+import { ProductService } from "src/services/product.service";
 
 @Component({
   template: `
@@ -29,26 +29,22 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class ProductDetailsComponent {
   product: any = null;
 
-  constructor(public http: HttpClient, public route: ActivatedRoute) {}
+  constructor(
+    public productService: ProductService,
+    public route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    const token = localStorage.getItem("API_TOKEN");
-
-    this.route.paramMap.subscribe((value) => {
-      this.http
-        .get("/api/items", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accepts: "application/json",
-          },
-          params: {
-            filter: JSON.stringify(["id", "=", value.get("id")]),
-          },
-        })
-        .subscribe((data: any) => {
-          this.product = data.data[0];
-          console.log("product ready");
-        });
+    this.route.data.subscribe((data: any) => {
+      this.product = data.product;
     });
+
+    // this.route.paramMap.subscribe((value) => {
+    //   this.productService
+    //     .find(value.get("id") ?? "")
+    //     .subscribe((product: any) => {
+    //       this.product = product;
+    //     });
+    // });
   }
 }

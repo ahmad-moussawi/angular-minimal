@@ -4,6 +4,7 @@ import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 import { combineLatestWith } from "rxjs/operators";
 import { AppStorageService } from "src/services/appstorage.service";
+import { AuthService } from "src/services/auth.service";
 
 @Component({
   selector: "app-login",
@@ -99,7 +100,8 @@ export class LoginComponent {
   constructor(
     public http: HttpClient,
     public router: Router,
-    public storage: AppStorageService
+    public storage: AppStorageService,
+    public auth: AuthService
   ) {}
 
   log(obj: any) {
@@ -107,18 +109,9 @@ export class LoginComponent {
   }
 
   login(data: any) {
-    console.log(data);
-
-    this.http
-      .post("https://free-angular-course.ahmadmoussawi.com/api/token", {
-        phone: data.phone,
-        device_name: "Samsung Galaxy",
-      })
-      .subscribe((data: any) => {
-        this.storage.set("API_TOKEN", data.token);
-
-        this.router.navigate(["/"]);
-      });
+    this.auth.login(data.phone, "Samsung Galaxy").subscribe((data: any) => {
+      this.router.navigate(["/"]);
+    });
   }
 
   ngOnInit() {
