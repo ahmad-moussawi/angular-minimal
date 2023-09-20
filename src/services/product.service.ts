@@ -3,6 +3,10 @@ import { HttpClient } from "@angular/common/http";
 import { catchError, map, throwError } from "rxjs";
 import { Router } from "@angular/router";
 
+import { environment } from "../environments/environment";
+
+console.log(environment);
+
 interface ItemApiParams {
   category_id?: string;
   q?: string;
@@ -15,7 +19,7 @@ export class ProductService {
 
   get(itemsParams: ItemApiParams) {
     return this.http
-      .get("/api/items", {
+      .get(`${environment.API_URL}/api/items`, {
         params: itemsParams as any,
       })
       .pipe(
@@ -36,7 +40,7 @@ export class ProductService {
 
   find(id: string) {
     return this.http
-      .get("/api/items", {
+      .get(`${environment.API_URL}/api/items`, {
         params: {
           filter: JSON.stringify(["id", "=", id]),
         },
@@ -55,7 +59,7 @@ export class ProductService {
 
   getCategories() {
     return this.http
-      .get("/api/categories", {
+      .get(`${environment.API_URL}/api/categories`, {
         params: {
           take: 6,
           select: '["id", "name"]',
